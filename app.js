@@ -22,27 +22,36 @@ var y = 50;
 
 function canvasDraw() {
   if(x > canvas.clientWidth+20) {
-    x = 0;  
+    x = 0;
   }
 
   if(y > canvas.clientHeight+20) {
-    y = 0;  
-  }  
+    y = 0;
+  }
 
   if(x < -20) {
-    x = canvas.clientWidth;  
+    x = canvas.clientWidth;
   }
 
   if(y < -20) {
-    y = canvas.clientHeight;  
+    y = canvas.clientHeight;
   }
 
   ctx.fillStyle = "black";
   ctx.fillRect(0,0,canvas.clientWidth,canvas.clientHeight);
-  ctx.fillStyle = "#f00";
-  
+  ctx.fillStyle = "#ff0";
+
   ctx.beginPath();
   ctx.arc(x,y,20,0,degToRad(360), true);
+  ctx.fill();
+
+  if (x > 710 && x < 790 && y > 260 && y < 340) {
+    ctx.fillStyle = "#0f0";
+  } else {
+    ctx.fillStyle = "#f00";
+  }
+  ctx.beginPath();
+  ctx.arc(800 - 50,600 / 2,40,0,degToRad(360), true);
   ctx.fill();
 }
 
@@ -55,9 +64,6 @@ canvas.requestPointerLock = canvas.requestPointerLock ||
 document.exitPointerLock = document.exitPointerLock ||
          document.mozExitPointerLock ||
          document.webkitExitPointerLock;
-//document.exitPointerLock();
-
-
 
 canvas.onclick = function() {
   canvas.requestPointerLock();
@@ -77,18 +83,10 @@ function lockChangeAlert() {
     console.log('The pointer lock status is now locked');
     document.addEventListener("mousemove", canvasLoop, false);
   } else {
-    console.log('The pointer lock status is now unlocked');  
+    console.log('The pointer lock status is now unlocked');
     document.removeEventListener("mousemove", canvasLoop, false);
   }
 }
-
-  var tracker = document.createElement('p');
-  var body = document.querySelector('body');
-  body.appendChild(tracker);
-  tracker.style.position = 'absolute';
-  tracker.style.top = '0';
-  tracker.style.right = '10px';
-  tracker.style.backgroundColor = 'white';
 
 function canvasLoop(e) {
   var movementX = e.movementX ||
@@ -101,14 +99,12 @@ function canvasLoop(e) {
       e.webkitMovementY   ||
       0;
 
-  x += movementX * 2;
-  y += movementY * 2;
+  x += movementX * 1.5;
+  y += movementY * 1.5;
   x += Math.floor(Math.random()*3 - 1);
   y += Math.floor(Math.random()*3 - 1);
 
   canvasDraw();
 
   var animation = requestAnimationFrame(canvasLoop);
-
-  tracker.innerHTML = "X position: " + x + ', Y position: ' + y;
 }
